@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const { readdirSync } = require("fs");
 require("dotenv").config();
 
 //app
@@ -14,7 +15,7 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: true,
-    useUnifiedTopology:true,
+    useUnifiedTopology: true,
   })
   .then(() => console.log("Database Connected !"))
   .catch((err) => console.log("Database connection error : ", err));
@@ -24,12 +25,8 @@ app.use(morgan("dev"));
 app.use(bodyParser.json({ limit: "2mb" }));
 app.use(cors());
 
-//route
-app.get("/api", (req, res) => {
-  res.json({
-    data: "Testing Server Setup",
-  });
-});
+//route middleware
+readdirSync("./routes").map((r) => app.use("/api", require("./routes/" + r)));
 
 //port
 const port = process.env.PORT || 8000;
