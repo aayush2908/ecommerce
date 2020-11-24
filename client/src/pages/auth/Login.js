@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { auth } from "../../firebase";
+import { auth , googleAuthProvider} from "../../firebase";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "antd";
-import { MailOutlined } from "@ant-design/icons";
+import { MailOutlined,GoogleOutlined } from "@ant-design/icons";
 import {useDispatch} from 'react-redux';
 
-const Login = () => {
+const Login = ({history}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,10 +30,31 @@ const Login = () => {
       });
       history.push('/');
     }catch(err){
-      toast.error(err.message);
-      setLoading(false);
+      toast.error(err.message)
+      setLoading(false)
     }
   };
+
+  const googleLogin = async () =>{
+    auth.signInWithPopup(googleAuthProvider)
+    .then(async (result)=>{
+      const {user} = result;
+      const idTokenResult= await user.getIdTokenResult();
+
+      dispatch({
+        type:"LOGGED_IN_USER",
+        payload:{
+          email:user.email,
+          token:idTokenResult.token,
+        },
+      });
+      history.push('/');
+    })
+    .catch((err)=>
+      toast.error(err.message),
+      setLoading(false)
+    )
+  }
 
   const loginForm = () => {
     return (
@@ -78,8 +99,20 @@ const Login = () => {
     <div className="container p-5">
       <div className="row">
         <div className="col-md-6 offset-md-3">
-          <h4>Login</h4>
+          {loading? (<h4 className="text-danger">Loading...</h4>) : (<h4>Login</h4>)}
           {loginForm()}
+          
+        <Button
+          onClick={googleLogin}
+          type="danger"
+          className="mb-3"
+          block
+          shape="round"
+          icon={<GoogleOutlined />}
+          size="large"
+        >
+          Login with Google
+        </Button>
         </div>
       </div>
     </div>
