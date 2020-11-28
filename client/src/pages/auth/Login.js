@@ -13,6 +13,11 @@ const Login = ({ history }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const roleBaseRedirect = (res) => {
+    if (res.data.role === "admin") history.push("/admin/dasboard");
+    else history.push("user/history");
+  };
+
   let dispatch = useDispatch();
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -40,13 +45,14 @@ const Login = ({ history }) => {
               _id: res.data._id,
             },
           });
+          roleBaseRedirect(res);
         })
-        .catch();
+        .catch((err) => console.log(err));
     } catch (err) {
       toast.error(err.message);
       setLoading(false);
     }
-    history.push("/");
+    // history.push("/");
   };
 
   const googleLogin = async () => {
@@ -68,9 +74,10 @@ const Login = ({ history }) => {
                 _id: res.data._id,
               },
             });
+            roleBaseRedirect(res);
           })
-          .catch();
-        history.push("/");
+          .catch((err) => console.log(err));
+        // history.push("/");
       })
       .catch((err) => toast.error(err.message), setLoading(false));
   };
