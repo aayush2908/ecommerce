@@ -16,12 +16,11 @@ import { useDispatch } from "react-redux";
 import { currentUser } from "./functions/auth";
 function App() {
   const dispatch = useDispatch();
-
-  //to check firebase auth state
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const idTokenResult = await user.getIdTokenResult();
+        console.log("user", user);
 
         currentUser(idTokenResult.token)
           .then((res) => {
@@ -39,8 +38,10 @@ function App() {
           .catch((err) => console.log(err));
       }
     });
+    // cleanup
     return () => unsubscribe();
   }, []);
+
   return (
     <>
       <Header />
