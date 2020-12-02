@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import {
-  createCategory,
-  getCategories,
-  removeCategory,
-} from "../../../functions/category";
+import { createSub, getSubs, removeSub } from "../../../functions/sub";
+
+import { getCategories } from "../../../functions/category";
+
 import { Link } from "react-router-dom";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import CategoryForm from "../../../components/forms/CategoryForm";
@@ -18,6 +17,7 @@ const SubCreate = () => {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [keyword, setKeyword] = useState("");
+  const [category, setCategory] = useState("");
 
   useEffect(() => {
     loadCategories();
@@ -29,12 +29,11 @@ const SubCreate = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    createCategory({ name }, user.token)
+    createSub({ name, parent: category }, user.token)
       .then((res) => {
         setLoading(false);
         setName("");
         toast.success(`${res.data.name} is created`);
-        loadCategories();
       })
       .catch((err) => {
         setLoading(false);
@@ -45,7 +44,7 @@ const SubCreate = () => {
   const handleRemove = async (slug) => {
     if (window.confirm("Are you sure ?")) {
       setLoading(true);
-      removeCategory(slug, user.token)
+      removeSub(slug, user.token)
         .then((res) => {
           setLoading(false);
           toast.success(`${res.data.name} deleted`);
@@ -74,6 +73,24 @@ const SubCreate = () => {
           ) : (
             <h4>Create Sub-Category</h4>
           )}
+
+          <div className="form-group">
+            <label>Parent Category</label>
+            <select
+              name="category"
+              className="form-control"
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option>Please Select Category</option>
+              {categories.length > 0 &&
+                categories.map((c) => (
+                  <option key={c._id} value={c._id}>
+                    {c.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+
           <CategoryForm
             handleSubmit={handleSubmit}
             name={name}
@@ -82,7 +99,7 @@ const SubCreate = () => {
 
           <LocalSearch keyword={keyword} setKeyword={setKeyword} />
 
-          {categories.filter(searched(keyword)).map((c) => (
+          {/* {categories.filter(searched(keyword)).map((c) => (
             <div className="alert alert-secondary" key={c.id}>
               {c.name}
               <span
@@ -97,7 +114,7 @@ const SubCreate = () => {
                 </span>
               </Link>
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
     </div>
