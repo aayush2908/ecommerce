@@ -7,5 +7,6 @@ const { authCheck, adminCheck } = require("../middleware/auth");
 const { create } = require("../controllers/product");
 
 router.post("/product", authCheck, adminCheck, create);
+router.get("/products", read);
 
 module.exports = router;
