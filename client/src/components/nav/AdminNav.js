@@ -12,13 +12,13 @@ const AdminNav = () => (
 
       <li className="nav-item">
         <Link to="/admin/product" className="nav-link">
-          Products
+          Add Product
         </Link>
       </li>
 
       <li className="nav-item">
         <Link to="/admin/products" className="nav-link">
-          Products
+          View Products
         </Link>
       </li>
 
