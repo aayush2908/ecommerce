@@ -3,6 +3,8 @@ import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { createProduct } from "../../../functions/product";
+import ProductCreateForm from "../../../components/forms/ProductCreateForm";
+import { getCategories, getCategorySubs } from "../../../functions/category";
 
 const initialState = {
   title: "Product",
@@ -22,23 +24,17 @@ const initialState = {
 
 const ProductCreate = () => {
   const [values, setValues] = useState(initialState);
+  const [subOptions, setSubOptions] = useState([]);
+  const [showSub, setShowSub] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
-  const {
-    title,
-    description,
-    price,
-    category,
-    categories,
-    subs,
-    shipping,
-    quantity,
-    images,
-    color,
-    brands,
-    colors,
-    brand,
-  } = values;
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  const loadCategories = () =>
+    getCategories().then((c) => setValues({ ...values, categories: c.data }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -58,6 +54,19 @@ const ProductCreate = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
+  const handleCategoryChange = (e) => {
+    e.preventDefault();
+    setValues({ ...values, subs: [], category: e.target.value });
+    getCategorySubs(e.target.value)
+      .then((res) => {
+        setSubOptions(res.data);
+      })
+      .catch((err) => {
+        toast.error(err.response.data);
+      });
+    setShowSub(true);
+  };
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -67,94 +76,16 @@ const ProductCreate = () => {
         <div className="col-md-10">
           <h4>Product Create Page</h4>
           <hr />
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Title</label>
-              <input
-                type="text"
-                name="title"
-                className="form-control"
-                value={title}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Description</label>
-              <input
-                type="text"
-                name="description"
-                className="form-control"
-                value={description}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Price</label>
-              <input
-                type="number"
-                name="price"
-                className="form-control"
-                value={price}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Shipping</label>
-              <select
-                name="shipping"
-                className="form-control"
-                onChange={handleChange}
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Quantity</label>
-              <input
-                type="number"
-                name="quantity"
-                className="form-control"
-                value={quantity}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Color</label>
-              <select
-                name="color"
-                className="form-control"
-                onChange={handleChange}
-              >
-                <option>Please select color</option>
-                {colors.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Brand</label>
-              <select
-                name="brand"
-                className="form-control"
-                onChange={handleChange}
-              >
-                <option>Please select brand</option>
-                {brands.map((b) => (
-                  <option key={b} value={b}>
-                    {b}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <button className="btn btn-outlined-info">Add Product</button>
-          </form>
+          {showSub}
+          <ProductCreateForm
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            setValues={setValues}
+            values={values}
+            handleCategoryChange={handleCategoryChange}
+            subOptions={subOptions}
+            showSub={showSub}
+          />
         </div>
       </div>
     </div>
