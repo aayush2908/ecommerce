@@ -26,6 +26,7 @@ exports.listAll = async (req, res) => {
 
 exports.remove = async (req, res) => {
   try {
+    console.log("YEsssss");
     const deleted = await Product.findOneAndRemove({
       slug: req.params.slug,
     }).exec();
