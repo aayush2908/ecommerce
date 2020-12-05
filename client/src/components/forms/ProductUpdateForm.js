@@ -63,6 +63,7 @@ const ProductUpdateForm = ({
       <div className="form-group">
         <label>Shipping</label>
         <select
+          value={shipping === "Yes" ? "Yes" : "No"}
           name="shipping"
           className="form-control"
           onChange={handleChange}
@@ -84,7 +85,12 @@ const ProductUpdateForm = ({
       </div>
       <div className="form-group">
         <label>Color</label>
-        <select name="color" className="form-control" onChange={handleChange}>
+        <select
+          value={color}
+          name="color"
+          className="form-control"
+          onChange={handleChange}
+        >
           <option>Please select color</option>
           {colors.map((c) => (
             <option key={c} value={c}>
@@ -95,7 +101,12 @@ const ProductUpdateForm = ({
       </div>
       <div className="form-group">
         <label>Brand</label>
-        <select name="brand" className="form-control" onChange={handleChange}>
+        <select
+          value={brand}
+          name="brand"
+          className="form-control"
+          onChange={handleChange}
+        >
           <option>Please select brand</option>
           {brands.map((b) => (
             <option key={b} value={b}>
