@@ -26,7 +26,6 @@ exports.listAll = async (req, res) => {
 
 exports.remove = async (req, res) => {
   try {
-    console.log("YEsssss");
     const deleted = await Product.findOneAndRemove({
       slug: req.params.slug,
     }).exec();
@@ -40,7 +39,7 @@ exports.remove = async (req, res) => {
 exports.read = async (req, res) => {
   const product = await Product.findOne({ slug: req.params.slug })
     .populate("catergory")
-    .populate("slug")
+    .populate("subs")
     .exec();
   res.json(product);
 };

@@ -3,7 +3,7 @@ import AdminNav from "../../../components/nav/AdminNav";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { getProduct } from "../../../functions/product";
-import ProductCreateForm from "../../../components/forms/ProductCreateForm";
+import ProductUpdateForm from "../../../components/forms/ProductUpdateForm";
 import { getCategories, getCategorySubs } from "../../../functions/category";
 import FileUpload from "../../../components/forms/FileUpload";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -35,11 +35,16 @@ const ProductUpdate = ({ match }) => {
   }, []);
 
   const loadProduct = () => {
-    getProduct(slug)
-      .then((res) => {
-        setValues({ ...values, ...res.data });
-      })
-      .catch((err) => {});
+    getProduct(slug).then((p) => {
+      setValues({ ...values, ...p.data });
+    });
+    //   .catch((err) => {});
+  };
+
+  const handleSubmit = () => {};
+
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
   };
 
   return (
@@ -50,6 +55,12 @@ const ProductUpdate = ({ match }) => {
         </div>
         <div className="col-md-10">
           <h4>Product Update</h4>
+          <ProductUpdateForm
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            values={values}
+            setValues={setValues}
+          />
           <hr />
         </div>
       </div>
