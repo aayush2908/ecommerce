@@ -27,7 +27,8 @@ const ProductUpdate = ({ match }) => {
   const [values, setValues] = useState(initialState);
   const [subOptions, setSubOptions] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [arrayOfSubs, setArrayOfSubIds] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [arrayOfSubs, setArrayOfSubs] = useState([]);
 
   const { slug } = match.params;
   const { user } = useSelector((state) => ({ ...state }));
@@ -48,7 +49,7 @@ const ProductUpdate = ({ match }) => {
         p.data.subs.map((s) => {
           arr.push(s._id);
         });
-        setArrayOfSubIds((prev) => arr);
+        setArrayOfSubs((prev) => arr);
       })
       .catch((err) => {});
   };
@@ -64,7 +65,8 @@ const ProductUpdate = ({ match }) => {
 
   const handleCategoryChange = (e) => {
     e.preventDefault();
-    setValues({ ...values, subs: [], category: e.target.value });
+    setValues({ ...values, subs: [] });
+    setSelectedCategory(e.target.value);
     getCategorySubs(e.target.value)
       .then((res) => {
         setSubOptions(res.data);
@@ -72,6 +74,8 @@ const ProductUpdate = ({ match }) => {
       .catch((err) => {
         toast.error(err.response.data);
       });
+    if (values.category._id === e.target.value) loadProduct();
+    setArrayOfSubs([]);
   };
 
   return (
@@ -91,7 +95,8 @@ const ProductUpdate = ({ match }) => {
             categories={categories}
             subOptions={subOptions}
             arrayOfSubs={arrayOfSubs}
-            setArrayOfSubIds={setArrayOfSubIds}
+            setArrayOfSubs={setArrayOfSubs}
+            selectedCategory={selectedCategory}
           />
           <hr />
         </div>
