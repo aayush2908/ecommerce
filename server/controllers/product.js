@@ -38,7 +38,7 @@ exports.remove = async (req, res) => {
 
 exports.read = async (req, res) => {
   const product = await Product.findOne({ slug: req.params.slug })
-    .populate("catergory")
+    .populate("category")
     .populate("subs")
     .exec();
   res.json(product);
