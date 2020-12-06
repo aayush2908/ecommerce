@@ -4,19 +4,26 @@ import { Link } from "react-router-dom";
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import defaultImage from "../../images/default.png";
+import ProductListItems from "./ProductListItems";
 
 const SingleProduct = ({ product }) => {
-  const { title, description, images, slug, price } = product;
+  const { title, images } = product;
   const { Meta } = Card;
 
   return (
     <>
       <div className="col-md-7">
-        <Carousel showArrows={true} autoPlay infiniteLoop>
-          {images && images.map((i) => <img src={i.url} key={i.public_id} />)}
-        </Carousel>
+        {images && images.length ? (
+          <Carousel showArrows={true} autoPlay infiniteLoop>
+            {images && images.map((i) => <img src={i.url} key={i.public_id} />)}
+          </Carousel>
+        ) : (
+          <Card cover={<img src={defaultImage} className="mb-3" />}></Card>
+        )}
       </div>
       <div className="col-md-5">
+        <h1 className="bg-primary p-3">{title}</h1>
         <Card
           actions={[
             <>
@@ -29,7 +36,7 @@ const SingleProduct = ({ product }) => {
             </Link>,
           ]}
         >
-          <Meta title={title} description={description} />
+          <ProductListItems product={product} />
         </Card>
       </div>
     </>
