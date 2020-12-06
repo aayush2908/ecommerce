@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getProductsByCount, removeProduct } from "../../../functions/product";
+import { getProductsByCount, removeProduct } from "../functions/product";
 import ProductCard from "../components/cards/ProductCard";
 
 const Home = () => {
