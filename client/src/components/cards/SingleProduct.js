@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "antd";
+import { Card, Tabs } from "antd";
 import { Link } from "react-router-dom";
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Carousel } from "react-responsive-carousel";
@@ -8,8 +8,8 @@ import defaultImage from "../../images/default.png";
 import ProductListItems from "./ProductListItems";
 
 const SingleProduct = ({ product }) => {
-  const { title, images } = product;
-  const { Meta } = Card;
+  const { title, images, description } = product;
+  const { TabPane } = Tabs;
 
   return (
     <>
@@ -21,6 +21,15 @@ const SingleProduct = ({ product }) => {
         ) : (
           <Card cover={<img src={defaultImage} className="mb-3" />}></Card>
         )}
+
+        <Tabs type="card">
+          <TabPane tab="Description" key="1">
+            {description && description}
+          </TabPane>
+          <TabPane tab="More" key="2">
+            Contact Aayush Agarwal : 8100258835 to know more about the product.
+          </TabPane>
+        </Tabs>
       </div>
       <div className="col-md-5">
         <h1 className="bg-primary p-3">{title}</h1>
