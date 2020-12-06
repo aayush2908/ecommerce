@@ -37,7 +37,7 @@ const ProductCard = ({ product }) => {
     >
       <Meta
         title={title}
-        description={`${description && description.substring(0, 14)}...`}
+        description={`${description && description.substring(0, 40)}...`}
       ></Meta>
     </Card>
   );

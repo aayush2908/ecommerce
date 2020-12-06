@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: true,
-      maxlength: 32,
+      maxlength: 150,
       text: true,
     },
     slug: {
@@ -54,11 +54,34 @@ const productSchema = new mongoose.Schema(
     },
     color: {
       type: String,
-      enum: ["Black", "White", "Silver", "Blue", "Not specified"],
+      enum: [
+        "Not specified",
+        "Black",
+        "White",
+        "Silver",
+        "Blue",
+        "Red",
+        "Yellow",
+        "Green",
+        "Brown",
+      ],
     },
     brand: {
       type: String,
-      enum: ["Apple", "Microsoft", "HP", "Lenovo", "Asus"],
+      enum: [
+        "Apple",
+        "Microsoft",
+        "HP",
+        "Lenovo",
+        "Asus",
+        "Mi",
+        "Realme",
+        "Vivo",
+        "Poco",
+        "OnePlus",
+        "LG",
+        "Samsung",
+      ],
     },
     // ratings: [
     //   {
