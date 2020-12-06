@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "antd";
+import { Card, Skeleton } from "antd";
 import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import defaultImage from "../../images/default.png";
 import { Link } from "react-router-dom";
@@ -28,9 +28,9 @@ const ProductCard = ({ product }) => {
         </Link>,
         <>
           <ShoppingCartOutlined
-            onClick={() => handleRemove(slug)}
+            //  onClick={() => handleRemove(slug)}
             className="text-danger"
-          />{" "}
+          />
           <br /> Add to Cart
         </>,
       ]}
