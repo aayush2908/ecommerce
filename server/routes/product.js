@@ -12,6 +12,7 @@ const {
   update,
   list,
   productsCount,
+  productStar,
 } = require("../controllers/product");
 
 router.post("/product", authCheck, adminCheck, create);
@@ -21,5 +22,6 @@ router.delete("/product/:slug", authCheck, adminCheck, remove);
 router.get("/product/:slug", read);
 router.put("/product/:slug", authCheck, adminCheck, update);
 router.post("/products", list);
+router.put("/product/star/:productId", authCheck, productStar);
 
 module.exports = router;

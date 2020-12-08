@@ -83,12 +83,12 @@ const productSchema = new mongoose.Schema(
         "Samsung",
       ],
     },
-    // ratings: [
-    //   {
-    //     star: Number,
-    //     postedBy: { type: ObjectId, ref: "User" },
-    //   },
-    // ],
+    ratings: [
+      {
+        star: Number,
+        postedBy: { type: ObjectId, ref: "User" },
+      },
+    ],
   },
   { timestamps: true }
 );
