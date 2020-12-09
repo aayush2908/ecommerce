@@ -8,7 +8,7 @@ import defaultImage from "../../images/default.png";
 import ProductListItems from "./ProductListItems";
 import StarRating from "react-star-ratings";
 import RatingModal from "../modal/RatingModal";
-import {showAverage} from "../../functions/rating";
+import { showAverage } from "../../functions/rating";
 
 const SingleProduct = ({ product, onStarClick, star }) => {
   const { title, images, description, _id } = product;
@@ -37,8 +37,11 @@ const SingleProduct = ({ product, onStarClick, star }) => {
       <div className="col-md-5">
         <h1 className="bg-primary p-3">{title}</h1>
 
-
-        {product && product.ratings && product.ratings.length>0 ? showAverage(product) : <div className="text-center pt-1 pb-3">No ratings yet</div>}
+        {product && product.ratings && product.ratings.length > 0 ? (
+          showAverage(product)
+        ) : (
+          <div className="text-center pt-1 pb-3">No ratings yet</div>
+        )}
         <Card
           actions={[
             <>
