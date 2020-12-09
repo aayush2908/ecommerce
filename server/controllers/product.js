@@ -131,3 +131,19 @@ exports.productStar = async (req, res) => {
     res.json(ratingUpdated);
   }
 };
+
+
+export.listRelated = async (req,res) => {
+  const product = await Product.findById(req.params.productId).exec();
+  const related= await Product.find({
+    _id:{$ne:product._id},
+    category:product.category,
+  })
+  .limit(3)
+  .populate('category')
+  .populate('subs')
+  .populate('postedBy')
+  .exec();
+
+  res.json(related);
+}
