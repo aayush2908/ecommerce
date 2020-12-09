@@ -34,7 +34,7 @@ const RatingModal = ({ children }) => {
         centered
         visible={modalVisible}
         onOk={() => {
-          setModalVisible(true);
+          setModalVisible(false);
           toast.success("Rating updated");
         }}
         onCancel={() => setModalVisible(false)}
