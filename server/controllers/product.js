@@ -147,7 +147,7 @@ exports.listRelated = async (req, res) => {
   res.json(related);
 };
 
-const handleQuery = async (req, res, query) => {
+const handlePrice = async (req, res, price) => {
   try {
     let products = await Product.find({
       price: {
@@ -165,7 +165,7 @@ const handleQuery = async (req, res, query) => {
   }
 };
 
-const handlePrice = async (req, res, price) => {
+const handleQuery = async (req, res, price) => {
   const products = await Product.find({ $text: { $search: query } })
     .populate('category,"_id name')
     .populate("subs", "_id name")
