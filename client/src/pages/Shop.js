@@ -4,6 +4,7 @@ import {
   fetchProductsByFilter,
 } from "../functions/product";
 import { getCategories } from "../functions/category";
+import { getSubs } from "../functions/sub";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../components/cards/ProductCard";
 import { Menu, Slider, Checkbox } from "antd";
@@ -11,6 +12,7 @@ import {
   DollarOutlined,
   DownSquareOutlined,
   StarOutlined,
+  TagOutlined,
 } from "@ant-design/icons";
 import Star from "../components/forms/Star";
 
@@ -22,6 +24,8 @@ const Shop = () => {
   const [categories, setCategories] = useState([]);
   const [categoryIds, setCategoryIds] = useState([]);
   const [star, setStar] = useState("");
+  const [subs, setSubs] = useState([]);
+  const [sub, setSub] = useState("");
 
   let dispatch = useDispatch();
   const { SubMenu, ItemGroup } = Menu;
@@ -32,9 +36,9 @@ const Shop = () => {
   useEffect(() => {
     loadAllProducts();
     //fetch categories
-    getCategories().then((res) => {
-      setCategories(res.data);
-    });
+    getCategories().then((res) => setCategories(res.data));
+    //fetch sub categories
+    getSubs().then((res) => setSubs(res.data));
   }, []);
 
   const loadAllProducts = () => {
@@ -76,6 +80,7 @@ const Shop = () => {
     setCategoryIds([]);
     setPrice(value);
     setStar("");
+    setSub("");
     setTimeout(() => {
       setOk(!ok);
     }, 300);
@@ -106,6 +111,7 @@ const Shop = () => {
     setPrice([0, 0]);
     setCategoryIds([]);
     setStar(num);
+    setSub("");
     fetchProducts({ stars: num });
   };
 
@@ -132,6 +138,7 @@ const Shop = () => {
     });
     setPrice([0, 0]);
     setStar("");
+    setSub("");
     let inTheState = [...categoryIds];
     let justChecked = e.target.value;
     let foundInTheState = inTheState.indexOf(justChecked);
@@ -142,6 +149,31 @@ const Shop = () => {
     }
     setCategoryIds(inTheState);
     fetchProducts({ category: inTheState });
+  };
+
+  //Sub categories
+  const showSubs = () =>
+    subs.map((s) => (
+      <div
+        className="p-1 m-1 badge badge-primary"
+        style={{ cursor: "pointer" }}
+        key={s._id}
+        onClick={() => handleSub(s)}
+      >
+        {s.name}
+      </div>
+    ));
+
+  const handleSub = (sub) => {
+    setSub(sub);
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setStar("");
+    setCategoryIds([]);
+    fetchProducts({ sub: sub });
   };
 
   return (
@@ -192,6 +224,19 @@ const Shop = () => {
               }
             >
               <div style={{ marginTop: "-10px" }}>{showStars()}</div>
+            </SubMenu>
+            {/* Sub categories */}
+            <SubMenu
+              key="4"
+              title={
+                <span className="h6">
+                  <TagOutlined /> Sub Categories
+                </span>
+              }
+            >
+              <div style={{ marginTop: "-10px" }} className="pl-4 pr-4">
+                {showSubs()}
+              </div>
             </SubMenu>
           </Menu>
         </div>
