@@ -12,7 +12,10 @@ import {
   DollarOutlined,
   DownSquareOutlined,
   StarOutlined,
-  TagOutlined,
+  TagsOutlined,
+  AntDesignOutlined,
+  ExperimentOutlined,
+  DeliveredProcedureOutlined,
 } from "@ant-design/icons";
 import Star from "../components/forms/Star";
 
@@ -40,6 +43,19 @@ const Shop = () => {
     "LG",
     "Samsung",
   ]);
+  const [colors, setColors] = useState([
+    "Not specified",
+    "Black",
+    "White",
+    "Silver",
+    "Blue",
+    "Red",
+    "Yellow",
+    "Green",
+    "Brown",
+  ]);
+  const [shipping, setShipping] = useState("");
+  const [color, setColor] = useState("");
   const [brand, setBrand] = useState("");
 
   let dispatch = useDispatch();
@@ -96,7 +112,9 @@ const Shop = () => {
     setPrice(value);
     setStar("");
     setSub("");
+    setShipping("");
     setBrand("");
+    setColor("");
     setTimeout(() => {
       setOk(!ok);
     }, 300);
@@ -127,6 +145,8 @@ const Shop = () => {
     setPrice([0, 0]);
     setCategoryIds([]);
     setStar(num);
+    setShipping("");
+    setColor("");
     setBrand("");
     setSub("");
     fetchProducts({ stars: num });
@@ -157,6 +177,8 @@ const Shop = () => {
     setStar("");
     setSub("");
     setBrand("");
+    setColor("");
+    setShipping("");
     let inTheState = [...categoryIds];
     let justChecked = e.target.value;
     let foundInTheState = inTheState.indexOf(justChecked);
@@ -190,8 +212,10 @@ const Shop = () => {
     });
     setPrice([0, 0]);
     setStar("");
+    setShipping("");
     setCategoryIds([]);
     setBrand("");
+    setColor("");
     fetchProducts({ sub: sub });
   };
 
@@ -209,6 +233,72 @@ const Shop = () => {
       </Radio>
     ));
 
+  //Colors
+  const showColors = () =>
+    colors.map((c) => (
+      <Radio
+        value={c}
+        name={c}
+        checked={c === color}
+        onChange={handleColor}
+        className="pb-1 pl-4 pr-4"
+      >
+        {c}
+      </Radio>
+    ));
+
+  //Shipping
+  const showShipping = () => (
+    <>
+      <Checkbox
+        className="pb-2 pl-4 pr-4"
+        onChange={handleShippingChange}
+        value="Yes"
+        checked={shipping === "Yes"}
+      >
+        Yes
+      </Checkbox>
+      <Checkbox
+        className="pb-2 pl-4 pr-4"
+        onChange={handleShippingChange}
+        value="No"
+        checked={shipping === "No"}
+      >
+        No
+      </Checkbox>
+    </>
+  );
+
+  const handleShippingChange = (e) => {
+    setSub("");
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setStar("");
+    setCategoryIds([]);
+    setBrand("");
+    setColor("");
+    setShipping(e.target.value);
+    fetchProducts({ shipping: e.target.value });
+  };
+
+  const handleColor = (e) => {
+    setSub("");
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setStar("");
+    setCategoryIds([]);
+    setShipping("");
+    setBrand("");
+    setColor(e.target.value);
+    fetchProducts({ color: e.target.value });
+  };
+
   const handleBrand = (e) => {
     setSub("");
     dispatch({
@@ -218,6 +308,8 @@ const Shop = () => {
     setPrice([0, 0]);
     setStar("");
     setCategoryIds([]);
+    setColor("");
+    setShipping("");
     setBrand(e.target.value);
     fetchProducts({ brand: e.target.value });
   };
@@ -276,7 +368,7 @@ const Shop = () => {
               key="4"
               title={
                 <span className="h6">
-                  <TagOutlined /> Sub Categories
+                  <TagsOutlined /> Sub Categories
                 </span>
               }
             >
@@ -289,11 +381,33 @@ const Shop = () => {
               key="5"
               title={
                 <span className="h6">
-                  <TagOutlined /> Brands
+                  <AntDesignOutlined /> Brands
                 </span>
               }
             >
               <div style={{ marginTop: "-10px" }}>{showBrands()}</div>
+            </SubMenu>
+            {/* Colors */}
+            <SubMenu
+              key="6"
+              title={
+                <span className="h6">
+                  <ExperimentOutlined /> Colors
+                </span>
+              }
+            >
+              <div style={{ marginTop: "-10px" }}>{showColors()}</div>
+            </SubMenu>
+            {/* Shipping */}
+            <SubMenu
+              key="7"
+              title={
+                <span className="h6">
+                  <DeliveredProcedureOutlined /> Shipping
+                </span>
+              }
+            >
+              <div style={{ marginTop: "-10px" }}>{showShipping()}</div>
             </SubMenu>
           </Menu>
         </div>
