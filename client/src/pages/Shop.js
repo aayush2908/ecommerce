@@ -7,7 +7,12 @@ import { getCategories } from "../functions/category";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../components/cards/ProductCard";
 import { Menu, Slider, Checkbox } from "antd";
-import { DollarOutlined, DownSquareOutlined } from "@ant-design/icons";
+import {
+  DollarOutlined,
+  DownSquareOutlined,
+  StarOutlined,
+} from "@ant-design/icons";
+import Star from "../components/forms/Star";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -16,6 +21,7 @@ const Shop = () => {
   const [ok, setOk] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoryIds, setCategoryIds] = useState([]);
+  const [star, setStar] = useState("");
 
   let dispatch = useDispatch();
   const { SubMenu, ItemGroup } = Menu;
@@ -69,6 +75,7 @@ const Shop = () => {
     });
     setCategoryIds([]);
     setPrice(value);
+    setStar("");
     setTimeout(() => {
       setOk(!ok);
     }, 300);
@@ -91,12 +98,40 @@ const Shop = () => {
       </div>
     ));
 
+  const handleStarClick = (num) => {
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    setCategoryIds([]);
+    setStar(num);
+    fetchProducts({ stars: num });
+  };
+
+  //Stars
+  const showStars = () => (
+    <div className="pr-4 pl-4 pb-2">
+      <Star starClick={handleStarClick} numberOfStars={5} />
+      <br />
+      <Star starClick={handleStarClick} numberOfStars={4} />
+      <br />
+      <Star starClick={handleStarClick} numberOfStars={3} />
+      <br />
+      <Star starClick={handleStarClick} numberOfStars={2} />
+      <br />
+      <Star starClick={handleStarClick} numberOfStars={1} />
+      <br />
+    </div>
+  );
+
   const handleCheck = (e) => {
     dispatch({
       type: "SEARCH_QUERY",
       payload: { text: "" },
     });
     setPrice([0, 0]);
+    setStar("");
     let inTheState = [...categoryIds];
     let justChecked = e.target.value;
     let foundInTheState = inTheState.indexOf(justChecked);
@@ -115,7 +150,7 @@ const Shop = () => {
         <div className="col-md-3 pt-2">
           <h4>Search/Filter Menu</h4>
           <hr />
-          <Menu defaultOpenKeys={["1", "2"]} mode="inline">
+          <Menu defaultOpenKeys={["1", "2", "3"]} mode="inline">
             {/* Price */}
             <SubMenu
               key="1"
@@ -146,6 +181,17 @@ const Shop = () => {
               }
             >
               <div style={{ marginTop: "-10px" }}>{showCategories()}</div>
+            </SubMenu>
+            {/* Star */}
+            <SubMenu
+              key="3"
+              title={
+                <span className="h6">
+                  <StarOutlined /> Rating
+                </span>
+              }
+            >
+              <div style={{ marginTop: "-10px" }}>{showStars()}</div>
             </SubMenu>
           </Menu>
         </div>

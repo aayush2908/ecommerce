@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getSubs } from "../../functions/sub";
 
-const SubList = () => {
+const SubHome = () => {
   const [subs, setSubs] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -32,4 +32,4 @@ const SubList = () => {
   );
 };
 
-export default SubList;
+export default SubHome;

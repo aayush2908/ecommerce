@@ -3,7 +3,7 @@ import Jumbotron from "../components/cards/Jumbotron";
 import NewArrivals from "../components/home/NewArrivals";
 import BestSellers from "../components/home/BestSellers";
 import CategoryList from "../components/category/CategoryList";
-import SubList from "../components/sub/SubList";
+import SubHome from "../components/sub/SubHome";
 
 const Home = () => {
   return (
@@ -34,7 +34,7 @@ const Home = () => {
         Sub Categories
       </h4>
 
-      <SubList />
+      <SubHome />
     </>
   );
 };
