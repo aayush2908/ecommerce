@@ -1,5 +1,5 @@
-import React from "react";
-import { Card, Skeleton } from "antd";
+import React, { useState } from "react";
+import { Card, Tooltip } from "antd";
 import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import defaultImage from "../../images/default.png";
 import { Link } from "react-router-dom";
@@ -9,6 +9,8 @@ import _ from "lodash";
 const { Meta } = Card;
 
 const ProductCard = ({ product }) => {
+  const [tooltip, SetTooltip] = useState("Click to Add");
+
   const handleAddToCart = () => {
     let cart = [];
     if (typeof window !== "undefined") {
@@ -22,6 +24,7 @@ const ProductCard = ({ product }) => {
       //remove duplicates
       let unique = _.uniqWith(cart, _.isEqual);
       localStorage.setItem("cart", JSON.stringify(unique));
+      SetTooltip("Added");
     }
   };
 
@@ -51,13 +54,16 @@ const ProductCard = ({ product }) => {
             <EyeOutlined className="text-warning" />
             <br /> View Product
           </Link>,
-          <a onClick={handleAddToCart}>
-            <ShoppingCartOutlined
-              //  onClick={() => handleRemove(slug)}
-              className="text-danger"
-            />
-            <br /> Add to Cart
-          </a>,
+          <Tooltip title={tooltip}>
+            <a onClick={handleAddToCart}>
+              <ShoppingCartOutlined
+                //  onClick={() => handleRemove(slug)}
+                className="text-danger"
+              />
+              <br /> Add to Cart
+            </a>
+            ,
+          </Tooltip>,
         ]}
       >
         <Meta
