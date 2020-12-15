@@ -4,10 +4,27 @@ import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import defaultImage from "../../images/default.png";
 import { Link } from "react-router-dom";
 import { showAverage } from "../../functions/rating";
+import _ from "lodash";
 
 const { Meta } = Card;
 
 const ProductCard = ({ product }) => {
+  const handleAddToCart = () => {
+    let cart = [];
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"));
+      }
+      cart.push({
+        ...product,
+        count: 1,
+      });
+      //remove duplicates
+      let unique = _.uniqWith(cart, _.isEqual);
+      localStorage.setItem("cart", JSON.stringify(unique));
+    }
+  };
+
   const { images, title, description, slug, price } = product;
 
   return (
@@ -34,13 +51,13 @@ const ProductCard = ({ product }) => {
             <EyeOutlined className="text-warning" />
             <br /> View Product
           </Link>,
-          <>
+          <a onClick={handleAddToCart}>
             <ShoppingCartOutlined
               //  onClick={() => handleRemove(slug)}
               className="text-danger"
             />
             <br /> Add to Cart
-          </>,
+          </a>,
         ]}
       >
         <Meta
