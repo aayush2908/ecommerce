@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Card, Tabs } from "antd";
+import React, { useState } from "react";
+import { Card, Tabs, Tooltip } from "antd";
 import { Link } from "react-router-dom";
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Carousel } from "react-responsive-carousel";
@@ -9,10 +9,40 @@ import ProductListItems from "./ProductListItems";
 import StarRating from "react-star-ratings";
 import RatingModal from "../modal/RatingModal";
 import { showAverage } from "../../functions/rating";
+import _ from "lodash";
+import { useSelector, useDispatch } from "react-redux";
 
 const SingleProduct = ({ product, onStarClick, star }) => {
   const { title, images, description, _id } = product;
   const { TabPane } = Tabs;
+
+  const [tooltip, SetTooltip] = useState("Click to Add");
+
+  const { user, cart } = useSelector((state) => ({ ...state }));
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    let cart = [];
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"));
+      }
+      cart.push({
+        ...product,
+        count: 1,
+      });
+      //remove duplicates
+      let unique = _.uniqWith(cart, _.isEqual);
+      localStorage.setItem("cart", JSON.stringify(unique));
+      SetTooltip("Added");
+
+      //add to redux state
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: unique,
+      });
+    }
+  };
 
   return (
     <>
@@ -44,10 +74,16 @@ const SingleProduct = ({ product, onStarClick, star }) => {
         )}
         <Card
           actions={[
-            <>
-              <ShoppingCartOutlined className="text-success" />
-              <br /> Add to Cart
-            </>,
+            <Tooltip title={tooltip}>
+              <a onClick={handleAddToCart}>
+                <ShoppingCartOutlined
+                  //  onClick={() => handleRemove(slug)}
+                  className="text-danger"
+                />
+                <br /> Add to Cart
+              </a>
+              ,
+            </Tooltip>,
             <Link to="/">
               <HeartOutlined className="text-info" />
               <br /> Add to Wishlist

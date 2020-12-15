@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Menu } from "antd";
+import { Menu, Badge } from "antd";
 import {
   UserAddOutlined,
   UserOutlined,
@@ -7,6 +7,7 @@ import {
   SettingOutlined,
   LogoutOutlined,
   ShoppingOutlined,
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
 import firebase from "firebase";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +21,7 @@ const Header = () => {
   const [current, setCurrent] = useState("home");
   let dispatch = useDispatch();
   let history = useHistory();
-  let { user } = useSelector((state) => ({ ...state }));
+  let { user, cart } = useSelector((state) => ({ ...state }));
 
   const handleClick = (e) => {
     setCurrent(e.key);
@@ -42,6 +43,13 @@ const Header = () => {
       </Item>
       <Item key="shop" icon={<ShoppingOutlined />}>
         <Link to="/shop">Shop</Link>
+      </Item>
+      <Item key="cart" icon={<ShoppingCartOutlined />}>
+        <Link to="/cart">
+          <Badge count={cart.length} offset={[9, 0]}>
+            Cart
+          </Badge>
+        </Link>
       </Item>
       {!user && (
         <Item key="register" icon={<UserAddOutlined />} className="float-right">

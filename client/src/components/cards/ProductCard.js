@@ -5,11 +5,15 @@ import defaultImage from "../../images/default.png";
 import { Link } from "react-router-dom";
 import { showAverage } from "../../functions/rating";
 import _ from "lodash";
+import { useSelector, useDispatch } from "react-redux";
 
 const { Meta } = Card;
 
 const ProductCard = ({ product }) => {
   const [tooltip, SetTooltip] = useState("Click to Add");
+
+  const { user, cart } = useSelector((state) => ({ ...state }));
+  const dispatch = useDispatch();
 
   const handleAddToCart = () => {
     let cart = [];
@@ -25,6 +29,12 @@ const ProductCard = ({ product }) => {
       let unique = _.uniqWith(cart, _.isEqual);
       localStorage.setItem("cart", JSON.stringify(unique));
       SetTooltip("Added");
+
+      //add to redux state
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: unique,
+      });
     }
   };
 
