@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import ProductCardInCheckout from "../components/cards/ProductCardInCheckout";
 
 const Cart = () => {
   const { user, cart } = useSelector((state) => ({ ...state }));
@@ -11,6 +12,28 @@ const Cart = () => {
       return c + n.count * n.price;
     }, 0);
   };
+
+  const saveOrderToDb = () => {};
+
+  const showCartItems = () => (
+    <table className="table table-bordered">
+      <thead className="thread-light">
+        <tr>
+          <th scope="col">Image</th>
+          <th scope="col">Title</th>
+          <th scope="col">Price</th>
+          <th scope="col">Brand</th>
+          <th scope="col">Color</th>
+          <th scope="col">Count</th>
+          <th scope="col">Shipping</th>
+          <th scope="col">Remove</th>
+        </tr>
+      </thead>
+      {cart.map((p) => (
+        <ProductCardInCheckout key={p._id} p={p} />
+      ))}
+    </table>
+  );
 
   return (
     <div className="container-fluid pt-2">
@@ -24,7 +47,7 @@ const Cart = () => {
               No products in cart. <Link to="/shop">Continue Shopping</Link>
             </p>
           ) : (
-            "show cart items"
+            showCartItems()
           )}
         </div>
         <div className="col-md-4">
@@ -42,12 +65,23 @@ const Cart = () => {
           Total : <b>Rs.{getTotal()}</b>
           <hr />
           {user ? (
-            <button className="btn btn-sm btn-primary mt-2">
+            <button
+              onClick={saveOrderToDb}
+              disabled={!cart.length}
+              className="btn btn-sm btn-primary mt-2"
+            >
               Proceed to Checkout
             </button>
           ) : (
             <button className="btn btn-sm btn-primary mt-2">
-              Login to Checkout
+              <Link
+                to={{
+                  pathname: "/login",
+                  state: { from: "cart" },
+                }}
+              >
+                Login to Checkout
+              </Link>
             </button>
           )}
         </div>
