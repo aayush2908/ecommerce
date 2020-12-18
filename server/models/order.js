@@ -31,4 +31,4 @@ const orderSchema = new mongoose.Schema(
   { timestamp: true }
 );
 
-module.exports = mongoose.model("Cart", cartSchema);
+module.exports = mongoose.model("Order", orderSchema);
