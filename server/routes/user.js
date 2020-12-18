@@ -19,7 +19,7 @@ router.get("/user/cart", authCheck, getUserCart);
 router.delete("/user/cart", authCheck, emptyCart);
 router.post("/user/address", authCheck, saveAddress);
 router.post("/user/cart/coupon", authCheck, applyCouponToUserCart);
-router.grt("/user/orders", authCheck, orders);
+router.get("/user/orders", authCheck, orders);
 router.post("/user/order", authCheck, createOrder);
 
 // router.get("/user", (req, res) => {
