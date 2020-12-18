@@ -120,3 +120,11 @@ exports.createOrder = async (req, res) => {
   const updated = await Product.bulkWrite(bulkOption, {});
   res.json({ ok: true });
 };
+
+exports.orders = async (req, res) => {
+  let user = await User.findOne({ email: req.user.email }).exec();
+  let userOrders = await Order.findOne({ orderedBy: user._id })
+    .populate("products.product")
+    .exec();
+  res.json(userOrders);
+};

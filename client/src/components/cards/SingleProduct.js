@@ -16,7 +16,9 @@ const SingleProduct = ({ product, onStarClick, star }) => {
   const { title, images, description, _id } = product;
   const { TabPane } = Tabs;
 
-  const [tooltip, SetTooltip] = useState("Click to Add");
+  const [tooltip, SetTooltip] = useState(
+    product.quantity < 1 ? "Out of Stock" : "Click to Add"
+  );
 
   const { user, cart } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
@@ -77,10 +79,10 @@ const SingleProduct = ({ product, onStarClick, star }) => {
             <Tooltip title={tooltip}>
               <a onClick={handleAddToCart}>
                 <ShoppingCartOutlined
-                  //  onClick={() => handleRemove(slug)}
+                  disabled={product.quantity < 1}
                   className="text-danger"
                 />
-                <br /> Add to Cart
+                <br /> {product.quantity < 1 ? "Out of Stock" : "Add To Cart"}
               </a>
               ,
             </Tooltip>,

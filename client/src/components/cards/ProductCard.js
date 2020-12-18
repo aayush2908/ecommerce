@@ -10,7 +10,9 @@ import { useSelector, useDispatch } from "react-redux";
 const { Meta } = Card;
 
 const ProductCard = ({ product }) => {
-  const [tooltip, SetTooltip] = useState("Click to Add");
+  const [tooltip, SetTooltip] = useState(
+    product.quantity < 1 ? "Out of Stock" : "Click to Add"
+  );
 
   const { user, cart } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
