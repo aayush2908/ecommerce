@@ -169,7 +169,7 @@ const Checkout = ({ history }) => {
         <br />
         {totalAfterDiscount > 0 && (
           <p className="bg-success p-2">
-            Discount Applied : Toatl Payable : Rs. {totalAfterDiscount}
+            Discount Applied : Total Payable : Rs. {totalAfterDiscount}
           </p>
         )}
         <div className="row">

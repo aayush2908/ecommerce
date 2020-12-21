@@ -4,8 +4,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { createPaymentIntent } from "../functions/stripe";
 import { Link } from "react-router-dom";
 import { Card } from "antd";
-import { DollarOutlined, CheckOutlined } from "@ant-design/icons";
+import {
+  DollarOutlined,
+  CheckOutlined,
+  MoneyCollectOutlined,
+  PercentageOutlined,
+} from "@ant-design/icons";
 import { createOrder, emptyUserCart } from "../functions/user";
+import payment from "../images/payment.png";
 
 const StripeCheckout = ({ history }) => {
   const dispatch = useDispatch();
@@ -19,6 +25,8 @@ const StripeCheckout = ({ history }) => {
   const [cartTotal, setCartTotal] = useState(0);
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [payable, setPayable] = useState(0);
+  const [tax, setTax] = useState(0);
+  const [discount, setDiscount] = useState(0);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -30,6 +38,8 @@ const StripeCheckout = ({ history }) => {
       setCartTotal(res.data.cartTotal);
       setTotalAfterDiscount(res.data.totalAfterDiscount);
       setPayable(res.data.payable);
+      setTax(res.data.tax);
+      setDiscount(res.data.discount);
     });
   }, []);
 
@@ -98,7 +108,7 @@ const StripeCheckout = ({ history }) => {
       {!succeeded && (
         <div>
           {coupon && totalAfterDiscount !== undefined ? (
-            <p className="alert alert-success">{`Total after discount: Rs. ${totalAfterDiscount}`}</p>
+            <p className="alert alert-success">{`Discounted Price: Rs. ${totalAfterDiscount}`}</p>
           ) : (
             <p className="alert alert-danger">No Coupon Applied</p>
           )}
@@ -106,14 +116,32 @@ const StripeCheckout = ({ history }) => {
       )}
       <div className="text-center pb-5">
         <Card
+          cover={
+            <img
+              src={payment}
+              style={{
+                height: "150px",
+                objectFit: "cover",
+                marginBottom: "-50px",
+              }}
+            />
+          }
           actions={[
             <>
               <DollarOutlined className="text-info" /> <br /> Total : Rs.{" "}
               {cartTotal}
             </>,
             <>
+              <MoneyCollectOutlined className="text-danger" />
+              <br /> Tax : Rs. {tax}
+            </>,
+            <>
+              <PercentageOutlined className="text-success" />
+              <br /> Discount : Rs. {discount}
+            </>,
+            <>
               <CheckOutlined className="text-info" />
-              <br /> Total Payable : Rs. {payable}
+              <br /> Total Payable : Rs. {payable / 100}
             </>,
           ]}
         ></Card>
