@@ -28,6 +28,11 @@ app.use(cors());
 //route middleware
 readdirSync("./routes").map((r) => app.use("/api", require("./routes/" + r)));
 
+//heroku
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+
 //port
 const port = process.env.PORT || 8000;
 
