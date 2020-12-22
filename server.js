@@ -26,7 +26,9 @@ app.use(bodyParser.json({ limit: "2mb" }));
 app.use(cors());
 
 //route middleware
-readdirSync("./routes").map((r) => app.use("/api", require("./routes/" + r)));
+readdirSync("./routes").map((r) =>
+  app.use(express.static("/api", require("./routes/" + r)))
+);
 
 //heroku
 if (process.env.NODE_ENV === "production") {
